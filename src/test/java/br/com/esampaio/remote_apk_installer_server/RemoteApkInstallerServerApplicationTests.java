@@ -1,4 +1,4 @@
-package br.com.esampaio.remote_apk_installer_server.remote.apk.installer.server;
+package br.com.esampaio.remote_apk_installer_server;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
