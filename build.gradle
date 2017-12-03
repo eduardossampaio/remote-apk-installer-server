@@ -26,5 +26,6 @@ repositories {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
 	compile("org.springframework.boot:spring-boot-starter-web:1.5.9.RELEASE")
+	compile("net.dongliu:apk-parser:2.4.1")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

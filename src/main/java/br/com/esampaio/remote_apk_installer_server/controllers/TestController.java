@@ -1,5 +1,6 @@
 package br.com.esampaio.remote_apk_installer_server.controllers;
 
+import net.dongliu.apk.parser.ApkFile;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
