@@ -12,6 +12,10 @@ public class HashUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    public static  byte[] generateHashAndSave(File inputFile) throws FileNotFoundException {
+        byte[] sha1 = SHA1.getSHA1(inputFile);
+        return sha1;
     }
 }

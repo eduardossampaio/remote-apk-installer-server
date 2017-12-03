@@ -10,12 +10,6 @@ import java.io.IOException;
 public class RemoteApkInstallerServerApplication {
 
 	public static void main(String[] args) {
-//		SpringApplication.run(RemoteApkInstallerServerApplication.class, args);/
-		String apkFilePath = "D:\\Users\\eduardo\\AndroidStudioProjects\\MyApplication\\app\\build\\outputs\\apk\\debug\\app-debug.apk";
-        try {
-            APKService.addNewAPK(apkFilePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+		SpringApplication.run(RemoteApkInstallerServerApplication.class, args);
     }
 }

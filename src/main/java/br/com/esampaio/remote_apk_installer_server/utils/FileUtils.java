@@ -35,8 +35,12 @@ public class FileUtils {
         }
         Files.write(path, bytes);
     }
-
-    public static void readBytes(){
-
+    public static byte[] readBytes(File file) throws IOException {
+        return readBytes(file.getAbsolutePath());
+    }
+    public static byte[] readBytes(String file) throws IOException {
+        Path path = Paths.get(file);
+        byte[] data = Files.readAllBytes(path);
+        return data;
     }
 }

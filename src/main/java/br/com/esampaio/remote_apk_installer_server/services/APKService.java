@@ -6,9 +6,11 @@ import br.com.esampaio.remote_apk_installer_server.utils.FileUtils;
 import br.com.esampaio.remote_apk_installer_server.utils.HashUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Date;
 
 public class APKService {
@@ -18,7 +20,10 @@ public class APKService {
     public static void addNewAPK(String filePath) throws IOException {
         File sourceFile = new File(filePath);
         if (!sourceFile.exists()) {
-            throw new IllegalStateException("File not exists");
+            throw new FileNotFoundException("File not exists");
+        }
+        if(isAlreadyAdded(filePath)){
+            throw new IllegalStateException("Apk is already added");
         }
         FileUtils.createDirIfNotExists(APK_BASE_DIR);
         String apkPackage = APKUtils.getApkPackage(filePath);
@@ -37,6 +42,22 @@ public class APKService {
             FileUtils.saveBytesInFile(partFile.getAbsolutePath(), buffer, bytesRead);
             indexFile++;
         }
+    }
 
+    public static boolean isAlreadyAdded(String filePath) throws IOException {
+        File sourceFile = new File(filePath);
+        if (!sourceFile.exists()) {
+            return false;
+        }
+        byte[] checksum = HashUtils.generateHashAndSave(sourceFile);
+        String apkPackage = APKUtils.getApkPackage(filePath);
+        File apkDirectory = new File(APK_BASE_DIR,apkPackage);
+        for(File directory:apkDirectory.listFiles()){
+            byte[] otherChecksum = FileUtils.readBytes(new File(directory,"checksum"));
+            if(Arrays.equals(checksum,otherChecksum)){
+                return true;
+            }
+        }
+        return false;
     }
 }
