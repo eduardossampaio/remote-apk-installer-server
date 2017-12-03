@@ -1,8 +1,6 @@
 package br.com.esampaio.remote_apk_installer_server.utils;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -42,5 +40,14 @@ public class FileUtils {
         Path path = Paths.get(file);
         byte[] data = Files.readAllBytes(path);
         return data;
+    }
+    public static void copyFile(String source,String destinationPath,String fileName) throws IOException {
+        File destinationFile = new File(destinationPath,fileName);
+        if(!destinationFile.exists()){
+            destinationFile.createNewFile();
+        }
+        FileOutputStream fileOutputStream = new FileOutputStream(destinationFile);
+        Files.copy(Paths.get(source),fileOutputStream);
+        fileOutputStream.close();
     }
 }

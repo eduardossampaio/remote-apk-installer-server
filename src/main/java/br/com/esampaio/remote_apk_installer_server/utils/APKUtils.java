@@ -7,13 +7,4 @@ import java.io.File;
 
 public class APKUtils {
 
-    public static String getApkPackage(String filePath){
-        try (ApkFile apkFile = new ApkFile(new File(filePath))) {
-            ApkMeta apkMeta = apkFile.getApkMeta();
-            return apkMeta.getPackageName();
-        }catch (Exception e){
-
-        }
-        return null;
-    }
 }
