@@ -12,15 +12,6 @@ import java.util.List;
 public class RemoteApkInstallerServerApplication {
 
 	public static void main(String[] args) {
-        List<ApkFile> apkFiles = null;
-        try {
-            apkFiles = APKService.listApks();
-            for(ApkFile apkFile : apkFiles){
-                System.out.println(apkFile);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        SpringApplication.run(RemoteApkInstallerServerApplication.class, args);
     }
 }

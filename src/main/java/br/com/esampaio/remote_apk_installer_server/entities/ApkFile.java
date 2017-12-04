@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.Date;
 
 public class ApkFile {
+    private String appName;
     private String packageName;
     private String versionName;
     private Long versionCode;
@@ -18,6 +19,7 @@ public class ApkFile {
     public ApkFile(File file){
         try (net.dongliu.apk.parser.ApkFile apkFile = new net.dongliu.apk.parser.ApkFile(file)) {
             ApkMeta apkMeta = apkFile.getApkMeta();
+            appName = apkMeta.getName();
             packageName = apkMeta.getPackageName();
             versionName = apkMeta.getVersionName();
             versionCode = apkMeta.getVersionCode();
@@ -30,12 +32,21 @@ public class ApkFile {
     @Override
     public String toString() {
         return "ApkFile{" +
-                "packageName='" + packageName + '\'' +
+                "appName='" + appName + '\'' +
+                ", packageName='" + packageName + '\'' +
                 ", versionName='" + versionName + '\'' +
                 ", versionCode=" + versionCode +
                 ", addedDate=" + addedDate +
                 ", checksum='" + checksum + '\'' +
                 '}';
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
     }
 
     public Date getAddedDate() {

@@ -38,17 +38,6 @@ public class APKService {
         HashUtils.generateHashAndSave(sourceFile, new File(apkDirectory, APK_CHECKSUM_FILE_NAME));
         FileUtils.copyFile(filePath,apkDirectory.getAbsolutePath(),SOURCE_APK_FILE_NAME);
 
-        RandomAccessFile randomAccessFile = null;
-        byte[] buffer = new byte[BUFFER_SIZE];
-        randomAccessFile = new RandomAccessFile(sourceFile, "r");
-        int bytesRead = 0;
-        int indexFile = 0;
-        while ((bytesRead = randomAccessFile.read(buffer)) > 0) {
-            File partFile = new File(apkDirectory, "" + indexFile);
-            FileUtils.saveBytesInFile(partFile.getAbsolutePath(), buffer, bytesRead);
-            indexFile++;
-        }
-        randomAccessFile.close();
     }
 
     public static boolean isAlreadyAdded(String filePath) throws IOException {
@@ -64,6 +53,9 @@ public class APKService {
             return false;
         }
         for(File directory:subdir){
+            if(directory.getName().startsWith(".")){
+                continue;
+            }
             byte[] otherChecksum = FileUtils.readBytes(new File(directory,APK_CHECKSUM_FILE_NAME));
             if(Arrays.equals(checksum,otherChecksum)){
                 return true;
@@ -75,20 +67,61 @@ public class APKService {
     public static List<ApkFile> listApks() throws IOException {
         File apkDirectory = new File(APK_BASE_DIR);
         List<ApkFile> apkFiles = new ArrayList<>();
-        for(File packagesDirectory:apkDirectory.listFiles()){
-            for(File versionDirectory:packagesDirectory.listFiles()) {
-                File apkFile = new File(versionDirectory, SOURCE_APK_FILE_NAME);
-                ApkFile apk = new ApkFile(apkFile);
-                try {
-                    apk.setAddedDate(DateUtils.toDate(versionDirectory.getName(),APK_ADDED_DATE_FORMAT));
-                } catch (ParseException e) {
-                    e.printStackTrace();
+        File[] apkDirectories = apkDirectory.listFiles();
+        if(apkDirectories!=null) {
+            for (File packagesDirectory : apkDirectories) {
+                File[] subfiles = packagesDirectory.listFiles();
+                if(subfiles==null || packagesDirectory.getName().startsWith(".")){
+                    continue;
                 }
-                byte[] checksum = FileUtils.readBytes(new File(versionDirectory,APK_CHECKSUM_FILE_NAME));
-                apk.setChecksum(new String(Base64.getEncoder().encode(checksum)));
-                apkFiles.add(apk);
+                for (File versionDirectory : subfiles) {
+                    if(versionDirectory.getName().startsWith(".")){
+                        continue;
+                    }
+                    File apkFile = new File(versionDirectory, SOURCE_APK_FILE_NAME);
+                    ApkFile apk = new ApkFile(apkFile);
+                    try {
+                        apk.setAddedDate(DateUtils.toDate(versionDirectory.getName(), APK_ADDED_DATE_FORMAT));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    byte[] checksum = FileUtils.readBytes(new File(versionDirectory, APK_CHECKSUM_FILE_NAME));
+                    apk.setChecksum(new String(Base64.getEncoder().encode(checksum)));
+                    apkFiles.add(apk);
+                }
             }
         }
         return apkFiles;
     }
+
+
+
+    public static File getApkFileByChecksum(String checksum) throws IOException {
+        File apkDirectory = new File(APK_BASE_DIR);
+
+        File[] apkDirectories = apkDirectory.listFiles();
+        if(apkDirectories!=null) {
+            for (File packagesDirectory : apkDirectories) {
+                File[] subfiles = packagesDirectory.listFiles();
+                if(subfiles==null || packagesDirectory.getName().startsWith(".")){
+                    continue;
+                }
+                for (File versionDirectory : subfiles) {
+                    if(versionDirectory.getName().startsWith(".")){
+                        continue;
+                    }
+                    byte[] otherChecksum = FileUtils.readBytes(new File(versionDirectory,APK_CHECKSUM_FILE_NAME));
+                    byte[] checksumBytes = Base64.getDecoder().decode(checksum);
+                    if(Arrays.equals(checksumBytes,otherChecksum)){
+                        return new File(versionDirectory,"source");
+                    }
+
+                }
+            }
+        }
+        return null;
+
+    }
+
+
 }
