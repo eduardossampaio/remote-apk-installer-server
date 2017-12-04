@@ -13,6 +13,7 @@ public class Apk implements Serializable{
     private Long versionCode;
     private Date addedDate;
     private String checksum;
+    private String[] changelog;
     private String localFilePath;
 
     @Override
@@ -96,5 +97,13 @@ public class Apk implements Serializable{
 
     public void setChecksum(String checksum) {
         this.checksum = checksum;
+    }
+
+    public String[] getChangelog() {
+        return changelog;
+    }
+
+    public void setChangelog(String[] changelog) {
+        this.changelog = changelog;
     }
 }

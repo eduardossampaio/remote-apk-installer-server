@@ -36,14 +36,19 @@ public class APKDAO {
         return apks;
     }
 
-    public static void addNewAPk(String apkFile) throws IOException {
+    public static void addNewAPk(String apkFile,String[] changelog) throws IOException {
         Gson gson = new Gson();
         List<Apk> apks = getAllAPks();
         Apk newAPK = APKUtils.buildAPK(apkFile);
+
+        File checksumFile = new File(APK_FILES_DIR,newAPK.getChecksum());
+        FileUtils.copyFile(apkFile,checksumFile);
+
+        newAPK.setLocalFilePath(checksumFile.getPath());
+        newAPK.setChangelog(changelog);
         apks.add(newAPK);
         String newJson = gson.toJson(apks);
         FileUtils.saveStringInFile(APK_DATA_FILE, newJson);
-        FileUtils.copyFile(apkFile,APK_FILES_DIR,newAPK.getChecksum());
     }
 
     public static Apk getApkByChecksum(String checksum) throws IOException {

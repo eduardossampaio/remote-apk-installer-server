@@ -4,6 +4,7 @@ import br.com.esampaio.remote_apk_installer_server.controllers.entities.response
 import br.com.esampaio.remote_apk_installer_server.controllers.entities.response.ResponseModel;
 import br.com.esampaio.remote_apk_installer_server.entities.Apk;
 import br.com.esampaio.remote_apk_installer_server.services.APKService;
+import br.com.esampaio.remote_apk_installer_server.utils.DateUtils;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class APKController {
     @RequestMapping(value = "/addNew", method = RequestMethod.POST)
     public ResponseModel<Void> addNewApk(@RequestBody AddAPKRequest request) {
         try{
-            APKService.addNewAPK(request.file);
+            APKService.addNewAPK(request.file,request.changelog);
             return new ResponseModel<>(new ResponseHeader(0, "OK"), null);
         }catch (Exception e){
             return new ResponseModel<>(new ResponseHeader(1, e.getMessage()), null);
@@ -43,7 +44,7 @@ public class APKController {
         }
         Path path = Paths.get(file.getAbsolutePath());
         ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
-        String fileName = "app.apk";
+        String fileName = String.format("%s-%s-%s.apk",apk.getAppName(),apk.getVersionName(), DateUtils.toString(apk.getAddedDate(),"dd/MM/yyyy HH:mm"));
         return ResponseEntity.ok()
                 .header("content-disposition","attachment; filename=\"" + fileName +"\"")
                 .contentLength(file.length())
