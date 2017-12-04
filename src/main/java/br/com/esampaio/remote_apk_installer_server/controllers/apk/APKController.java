@@ -2,10 +2,11 @@ package br.com.esampaio.remote_apk_installer_server.controllers.apk;
 
 import br.com.esampaio.remote_apk_installer_server.controllers.entities.response.ResponseHeader;
 import br.com.esampaio.remote_apk_installer_server.controllers.entities.response.ResponseModel;
-import br.com.esampaio.remote_apk_installer_server.entities.ApkFile;
+import br.com.esampaio.remote_apk_installer_server.entities.Apk;
 import br.com.esampaio.remote_apk_installer_server.services.APKService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,22 +36,26 @@ public class APKController {
 
     @RequestMapping(path = "/download", method = RequestMethod.GET)
     public ResponseEntity<Resource> download(String checksum) throws IOException {
-
-        File file = APKService.getApkFileByChecksum(checksum);
+        Apk apk = APKService.getApkByChecksum(checksum);
+        File file = new File(apk.getLocalFilePath());
+        if(file==null){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
         Path path = Paths.get(file.getAbsolutePath());
         ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
-
+        String fileName = "app.apk";
         return ResponseEntity.ok()
+                .header("content-disposition","attachment; filename=\"" + fileName +"\"")
                 .contentLength(file.length())
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(resource);
     }
 
     @RequestMapping(path = "/listAll")
-    public ResponseModel<List<ApkFile>> listAll() throws IOException {
+    public ResponseModel<List<Apk>> listAll() throws IOException {
         try{
-            List<ApkFile> apkFiles = APKService.listApks();
-            return new ResponseModel<List<ApkFile>>(new ResponseHeader(0, "OK"), apkFiles);
+            List<Apk> apks = APKService.listApks();
+            return new ResponseModel<List<Apk>>(new ResponseHeader(0, "OK"), apks);
         }catch (Exception e){
             return new ResponseModel<>(new ResponseHeader(1, e.getMessage()), null);
         }

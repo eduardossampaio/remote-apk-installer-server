@@ -1,0 +1,22 @@
+[{
+    "appName": "Sicoobcard",
+    "packageName": "tivit.com.cabal.sicoob.cp.dev",
+    "versionName": "1.7.0",
+    "versionCode": 32,
+    "addedDate": "Dec 4, 2017 5:27:35 PM",
+    "checksum": "cVzB65eH3ypdrGiX9B5E6VNnKFw="
+}, {
+    "appName": "Cecred Cartões",
+    "packageName": "br.coop.cecred.cecredcartoes.dev",
+    "versionName": "1.0.1",
+    "versionCode": 13,
+    "addedDate": "Dec 4, 2017 5:34:04 PM",
+    "checksum": "JgAdkUvZoend3XsVArGwI4q6yZE="
+}, {
+    "appName": "Unicred Cartões",
+    "packageName": "br.coop.unicred.unicredcp.dev",
+    "versionName": "1.0.2",
+    "versionCode": 34,
+    "addedDate": "Dec 4, 2017 5:34:17 PM",
+    "checksum": "E4YsOp9o7+vSw68koszdKMHzl7U="
+}]

@@ -15,6 +15,16 @@ public class FileUtils {
        Files.createDirectories(path);
     }
 
+    public static void createFileIfNotExists(String file) throws IOException {
+        createFileIfNotExists(new File(file));
+    }
+    public static void createFileIfNotExists(File file) throws IOException {
+        Path path = file.toPath();
+        if(Files.notExists(path)) {
+            Files.createFile(path);
+        }
+    }
+
     public static void saveBytesInFile(String file,byte[] bytes,int size) throws IOException {
         if(bytes.length==size){
             saveBytesInFile(file,bytes);
@@ -33,6 +43,10 @@ public class FileUtils {
         }
         Files.write(path, bytes);
     }
+    public static void saveStringInFile(String file,String content) throws IOException {
+        saveBytesInFile(file,content.getBytes());
+    }
+
     public static byte[] readBytes(File file) throws IOException {
         return readBytes(file.getAbsolutePath());
     }
