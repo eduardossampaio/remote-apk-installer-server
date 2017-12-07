@@ -56,7 +56,7 @@ public class APKController {
     public ResponseModel<List<Apk>> listAll() throws IOException {
         try{
             List<Apk> apks = APKService.listApks();
-            return new ResponseModel<List<Apk>>(new ResponseHeader(0, "OK"), apks);
+            return new ResponseModel<>(new ResponseHeader(0, "OK"), apks);
         }catch (Exception e){
             return new ResponseModel<>(new ResponseHeader(1, e.getMessage()), null);
         }

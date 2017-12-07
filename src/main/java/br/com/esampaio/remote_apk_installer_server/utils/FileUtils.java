@@ -56,7 +56,11 @@ public class FileUtils {
         return data;
     }
     public static void copyFile(String source,String destinationPath,String fileName) throws IOException {
-        copyFile(source,new File(destinationPath,fileName));
+        File file = new File(destinationPath, fileName);
+        if(!file.exists()){
+            file.createNewFile();
+        }
+        copyFile(source,file);
     }
     public static void copyFile(String source,File destinationFile) throws IOException {
         if(!destinationFile.exists()){

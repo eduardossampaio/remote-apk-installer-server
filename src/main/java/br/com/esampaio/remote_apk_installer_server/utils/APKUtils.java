@@ -25,7 +25,7 @@ public class APKUtils {
             buildedApk.setPackageName(packageName);
             buildedApk.setVersionName(versionName);
             buildedApk.setVersionCode(versionCode);
-            buildedApk.setChecksum(Base64.getEncoder().encodeToString(checksum));
+            buildedApk.setChecksum(Base64.getUrlEncoder().encodeToString(checksum));
             buildedApk.setAddedDate(addedDate);
             return buildedApk;
         }catch (Exception e){
