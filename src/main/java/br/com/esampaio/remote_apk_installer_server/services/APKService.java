@@ -16,7 +16,7 @@ import java.util.*;
 public class APKService {
     public static final String APK_CHECKSUM_FILE_NAME = "checksum";
 
-    public static void addNewAPK(String filePath,String[] changelog) throws IOException {
+    public static void addNewAPK(String filePath) throws IOException {
         File sourceFile = new File(filePath);
         if (!sourceFile.exists()) {
             throw new FileNotFoundException("File not exists");
@@ -24,7 +24,7 @@ public class APKService {
         if(isAlreadyAdded(filePath)){
             throw new IllegalStateException("Apk is already added");
         }
-        APKDAO.addNewAPk(filePath,changelog);
+        APKDAO.addNewAPk(filePath);
     }
 
     public static boolean isAlreadyAdded(String filePath) throws IOException {

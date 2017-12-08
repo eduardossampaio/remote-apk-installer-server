@@ -2,6 +2,7 @@ package br.com.esampaio.remote_apk_installer_server.utils;
 
 import br.com.esampaio.remote_apk_installer_server.entities.Apk;
 import net.dongliu.apk.parser.bean.ApkMeta;
+import net.dongliu.apk.parser.bean.Icon;
 
 import java.io.File;
 import java.util.Base64;
@@ -19,6 +20,9 @@ public class APKUtils {
             String packageName = apkMeta.getPackageName();
             String versionName = apkMeta.getVersionName();
             Long versionCode = apkMeta.getVersionCode();
+            Icon iconFile = apkFile.getIconFile();
+            byte[] iconBytes = iconFile.getData();
+            String encodedIconFile = Base64.getUrlEncoder().encodeToString(iconBytes);
             byte[] checksum = HashUtils.generateHashAndSave(file);
             Date addedDate = new Date(System.currentTimeMillis());
             buildedApk.setAppName(appName);
@@ -27,6 +31,7 @@ public class APKUtils {
             buildedApk.setVersionCode(versionCode);
             buildedApk.setChecksum(Base64.getUrlEncoder().encodeToString(checksum));
             buildedApk.setAddedDate(addedDate);
+            buildedApk.setIconFile(encodedIconFile);
             return buildedApk;
         }catch (Exception e){
             throw new IllegalStateException("failed to create file");

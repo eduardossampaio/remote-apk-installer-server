@@ -16,7 +16,7 @@ import java.util.List;
 public class APKDAO {
     private static final String APK_DATA_FILE = "apks.json";
     private static final String APK_FILES_DIR = "apks";
-
+    private static final String APK_CHANGELOG_FILE = "_changelog.txt";
     static {
         try {
             FileUtils.createFileIfNotExists(APK_DATA_FILE);
@@ -33,19 +33,27 @@ public class APKDAO {
         if (apks == null) {
             apks = new ArrayList<>();
         }
+        for(Apk apk: apks){
+            try {
+                String changelog = new String(FileUtils.readBytes(new File(APK_FILES_DIR,apk.getChecksum() + APK_CHANGELOG_FILE)));
+                apk.setChangelog(changelog);
+            }catch (Exception e){
+                apk.setChangelog("Erro ao obter changelog para este app");
+            }
+        }
         return apks;
     }
 
-    public static void addNewAPk(String apkFile,String[] changelog) throws IOException {
+    public static void addNewAPk(String apkFile) throws IOException {
         Gson gson = new Gson();
         List<Apk> apks = getAllAPks();
         Apk newAPK = APKUtils.buildAPK(apkFile);
 
         File checksumFile = new File(APK_FILES_DIR,newAPK.getChecksum());
         FileUtils.copyFile(apkFile,checksumFile);
+        FileUtils.createFileIfNotExists(new File(APK_FILES_DIR,newAPK.getChecksum()+APK_CHANGELOG_FILE));
 
         newAPK.setLocalFilePath(checksumFile.getPath());
-        newAPK.setChangelog(changelog);
         apks.add(newAPK);
         String newJson = gson.toJson(apks);
         FileUtils.saveStringInFile(APK_DATA_FILE, newJson);

@@ -13,8 +13,9 @@ public class Apk implements Serializable{
     private Long versionCode;
     private Date addedDate;
     private String checksum;
-    private String[] changelog;
+    private String changelog;
     private String localFilePath;
+    private String iconFile;
 
     @Override
     public String toString() {
@@ -25,6 +26,7 @@ public class Apk implements Serializable{
                 ", versionCode=" + versionCode +
                 ", addedDate=" + addedDate +
                 ", checksum='" + checksum + '\'' +
+                ", changelog='" + changelog + '\'' +
                 '}';
     }
 
@@ -99,11 +101,19 @@ public class Apk implements Serializable{
         this.checksum = checksum;
     }
 
-    public String[] getChangelog() {
+    public String getChangelog() {
         return changelog;
     }
 
-    public void setChangelog(String[] changelog) {
+    public void setChangelog(String changelog) {
         this.changelog = changelog;
+    }
+
+    public String getIconFile() {
+        return iconFile;
+    }
+
+    public void setIconFile(String iconFile) {
+        this.iconFile = iconFile;
     }
 }

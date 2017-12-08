@@ -28,7 +28,7 @@ public class APKController {
     @RequestMapping(value = "/addNew", method = RequestMethod.POST)
     public ResponseModel<Void> addNewApk(@RequestBody AddAPKRequest request) {
         try{
-            APKService.addNewAPK(request.file,request.changelog);
+            APKService.addNewAPK(request.file);
             return new ResponseModel<>(new ResponseHeader(0, "OK"), null);
         }catch (Exception e){
             return new ResponseModel<>(new ResponseHeader(1, e.getMessage()), null);
